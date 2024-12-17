@@ -1,0 +1,135 @@
+% Netanomics Company Slides Style
+%Jonathan H. Morgan
+%20 February 2024
+
+\ProvidesPackage{Netanomics_Beamer}
+
+% Remove navigation bar
+\setbeamertemplate{navigation symbols}{}
+\setbeamercovered{transparent}
+
+%Force the Use of Serif Fonts (Palatino Linotype)
+\usefonttheme{serif} % Encourages Beamer to use serif fonts globally
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{fontspec}
+\usepackage{xcolor} % For defining custom colors
+\usepackage{datetime} % For more flexible date formatting
+\usepackage{etoolbox} % For conditional structures that are robust
+\usepackage{hyperref}
+\usepackage[hang,flushmargin]{footmisc} % for footnote customization
+\usepackage{ragged2e} % for \RaggedLeft
+
+% Setting Footnotes to be Right Justified
+\makeatletter
+\renewcommand\@makefntext[1]{%
+  \vspace{-2mm}% Adjust the vertical space above the footnote
+  \setlength\parindent{1em}% 
+  \noindent
+  \mbox{\@thefnmark.\ }% The footnote marker
+  \RaggedLeft #1% Right-justify the footnote text
+  \vspace{2mm}% Adjust the vertical space below the footnote
+}
+\makeatother
+
+\makeatletter
+\renewcommand{\footnoterule}{}
+\makeatother
+
+% Simplified command to set the title page background
+\newcommand{\setTitlePageBackground}{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth, height=\paperheight]{Cover_Slide.pdf}}
+}
+
+% Simplified command to set the main slide background
+\newcommand{\setMainSlideBackground}{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth, height=\paperheight]{Slide_Body.pdf}}
+}
+
+% Set section title font
+\newfontfamily{\headingfont}{[l_10646.ttf]} % Adjust based on your font file
+
+% Define the Heading color
+\definecolor{CustomHeadingColor}{RGB}{23, 64, 109}
+
+% Define a Highlighting Color
+\newcommand{\blueText}[1]{\textcolor{blue}{#1}}
+
+% Create Shadowing Effect
+\newcommand{\shadowtext}[1]{
+    \begin{tikzpicture}[baseline=(text.base)]
+        \node[inner sep=0pt,outer sep=0pt, text=CustomHeadingColor] (text) {#1}; % Original text
+        \node[inner sep=0pt,outer sep=0pt, text=gray, opacity=0.5, anchor=south west] at (text.south west) [xshift=0.5pt, yshift=-0.5pt] {#1}; % Shadow text
+    \end{tikzpicture}
+}
+
+% Customizing the frame title template
+\setbeamertemplate{frametitle}{
+    \vspace{1em} % Space above the frame title
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}
+    {\fontsize{30}{41}\selectfont\headingfont\shadowtext{\insertframetitle}} % Set font size and apply shadow
+}
+
+% Directly set the formatted date for use in the document
+\def\footerdate{\the\month/\the\day/\the\year}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \ifnum\insertpagenumber>1\relax
+      \footerdate\hspace{2em}\insertframenumber\hspace{2ex}
+    \fi
+  \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+\definecolor{lightgray}{RGB}{186,186,186} % Defines a light gray color
+\setbeamercolor{date in head/foot}{fg=lightgray}
+\setbeamercolor{page number in head/foot}{fg=lightgray}
+
+% Creating Beamer Title Slide Template
+\setbeamertemplate{title page}{
+    \usebackgroundtemplate{\includegraphics[width=\paperwidth]{Cover_Slide.pdf}} % Background for title page only
+    \vspace*{1.5cm} % Adjust space at the top as needed
+
+    \begin{minipage}{\textwidth}
+        \begin{center}
+        {\shadowtext{\headingfont\color{CustomHeadingColor}\fontsize{25}{35}\selectfont\inserttitle\par}} % Title with shadow
+        \end{center}
+    \end{minipage}
+
+    \vspace*{0.5cm} % Fixed space between title and subtitle
+
+    \begin{minipage}{\textwidth}
+        \begin{center}
+        {\headingfont\color{CustomHeadingColor}\fontsize{20}{25}\selectfont\insertsubtitle\par} % Subtitle
+        \end{center}
+    \end{minipage}
+
+    % Use flushright environment for right-justified content
+    \begin{flushright}
+    \vspace*{1cm} % Space before author/institute/date
+    
+    {\headingfont\color{CustomHeadingColor}\fontsize{15}{20}\selectfont\insertauthor\par} % Author
+    
+    \vspace*{0.1cm}
+    
+    {\headingfont\color{CustomHeadingColor}\fontsize{15}{20}\selectfont\insertdate\par} % Date
+    \end{flushright}
+    \vspace*{2cm} % Adjust space at the bottom as needed
+    \usebackgroundtemplate{} % Clear the background after the title page
+}
+
+% Specifying Bullet Items
+\setbeamertemplate{items}[triangle]
+
+% Customizing the table of contents
+\setbeamercolor{section in toc}{fg=CustomHeadingColor}
+\setbeamerfont{section in toc}{size=\fontsize{15}{20}, series=\bfseries}
+\setbeamertemplate{section in toc}[sections numbered]
